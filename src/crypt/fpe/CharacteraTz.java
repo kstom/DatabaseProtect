@@ -10,10 +10,11 @@ package crypt.fpe;
  *
  * @author KSTOM
  */
-public class CharacterStander implements CharacterInterface{
-    private static final int range = 63; 
+public class CharacteraTz implements CharacterInterface{
+    private static final int range = 26;
     
     
+  
     
     @Override
     public boolean isMatch(Object obj){
@@ -21,10 +22,9 @@ public class CharacterStander implements CharacterInterface{
         if(str.length()<1)
             return false;
         boolean match = true;
-        
         for(int i=0;i<str.length();i++){
             char ch = str.charAt(i);
-            if(!(('A'<=ch && ch<='Z') || ('a'<=ch && ch<='z') || ('0'<=ch && ch<='9') || (ch == '_'))){
+            if(!('a'<=ch && ch<='z')){
                 match = false;
                 return match;
             }
@@ -34,8 +34,8 @@ public class CharacterStander implements CharacterInterface{
     
     @Override
     public Object objToInteger(Object obj) {
-        String ciphertext = (String)obj;
-        return this.stringToLong(ciphertext);
+        String str = (String)obj;
+        return this.stringToLong(str);
     }
 
     @Override
@@ -45,8 +45,7 @@ public class CharacterStander implements CharacterInterface{
     }
     
     
-
-    public long getMaxnum(Object obj) {
+    public long getMaxnum(Object obj){
         long dimension = (long)obj;
         long max_num = 1;
         for(int i=0;i<dimension;i++){
@@ -54,57 +53,44 @@ public class CharacterStander implements CharacterInterface{
         }
         return max_num;
     }
+    
 
-
-    public String before(Object obj) {
-        String str = (String)obj;
-        return '0'+str;
+    public String before(Object obj){
+        Object str = (String)obj;
+        return "b"+str;
     }
+    
 
-    public String after(Object obj) {
+    public String after(Object obj){
         String str = (String)obj;
         if(str.length()>=1) 
             return str.substring(1);
         else
             return "";
     }
+    
 
-    public long charToLong(Object obj) {
+    public long charToLong(Object obj){
         char ch = (char)obj;
-        if(ch == '_'){
-            return 0;
-        }else if('0'<=ch && ch<='9'){
-            return (long)ch-47;
-        }else if('A'<=ch && ch<='Z' ){
-            return (long)ch-54;
-        }else if('a'<=ch && ch<='z'){
-            return (long)ch-60;
-        }
-        return 0;
+        return ((long)ch-97);
+    }
+    
+
+    public char longToChar(Object obj){
+        long num = (long)obj;
+        return (char)(num+97);
     }
 
-    public char longToChar(Object obj) {
-        long num = (long)obj;
-        if(num == 0){
-            return '_';
-        }else if(((long)'0'-47)<=num && num<=((long)'9'-47)){
-            return (char)(num+47);
-        }else if(((long)'A'-54)<=num && num<=((long)'Z'-54) ){
-            return (char)(num+54);
-        }else if(((long)'a'-60)<=num && num<=((long)'z'-60)){  
-            return (char)(num+60);
-        }
-        return 0;
-    }
 
     public int getRange() {
         return range;
     }
 
+    
+    
     public String longToString(long num) {
         String str="";
-        //System.out.println("long : "+ num);
-        while(num != 0){      
+        while(num != 0){            
             str = (this.longToChar(num%this.getRange())) + str;
             num = num / this.getRange();
         }

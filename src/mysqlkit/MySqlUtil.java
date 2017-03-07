@@ -92,8 +92,8 @@ public class MySqlUtil {
                         double item = rs.getDouble(i+1);
                     }else if(type[i] == Type.FLOAT){
                         float item = rs.getFloat(i+1);
-                    }else if(type[i] == Type.){
-                        rs.get
+                    }else if(type[i] == Type.LONG){
+                        
                     }else if(type[i] == Type.DOUBLE){
                     }else if(type[i] == Type.DOUBLE){
                     }else if(type[i] == Type.DOUBLE){

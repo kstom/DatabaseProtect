@@ -8,13 +8,14 @@ package mysqltest;
 
 
 import associationrule.apriori.Apriori;
+import crypt.fpe.*;
+import java.lang.*;
 import java.sql.Connection;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import mysqlkit.JDBCconnect;
 import mysqlkit.MySqlUtil;
-import crypt.fpe.*;
-import java.lang.*;
 /**
  *
  * @author KSTOM
@@ -25,19 +26,24 @@ public class MySqlTest {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        /*
-        String str="cde``g";
-        CharacterAscii alpha = new CharacterAscii();
-        CteEncryption fpeEncrypt = new CteEncryption(alpha);
-                     
-        String ciphertext = fpeEncrypt.Encoding_s(str);
-        System.out.println("ciphertext : "+ciphertext);
-        String plaintext = fpeEncrypt.Decoding_s(ciphertext);
-        System.out.println("plaintext : "+plaintext);
         
+        
+        long key = 12345;
+        double db = 2.36;
+        
+        CharacterDouble cs = new CharacterDouble();
+        
+        CteEncryption CE = new CteEncryption(cs,key);
+        
+        double str1 = (double)CE.Encoding(db);
+        
+        System.out.println(str1);
+        double str2 = (double)CE.Decoding(str1);
+        System.out.println(str2);
         //你：100111101100000
-        */
         
+        
+        /*
         MySqlUtil sqlutil = new MySqlUtil(JDBCconnect.getConnect("groceries"));
         List<String> list = sqlutil.getTablesName();
         String[] items = new String[1];
@@ -96,4 +102,9 @@ public class MySqlTest {
             System.out.println();
         }
     }
+    
+    static void showTime(Time time){
+        System.out.println(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds());
+    }
+    
 }

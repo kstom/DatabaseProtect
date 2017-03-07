@@ -11,18 +11,23 @@ package crypt.fpe;
  * @author KSTOM
  */
 public interface CharacterInterface {
-    public boolean isMatch(String str);
+    public boolean isMatch(Object str);
     
-    public long getMaxnum(long dimension);
+    public Object objToInteger(Object obj);
     
-    public String before(String str);
+    public Object integerToObj(Object obj);
+
+    /*
+    public long getMaxnum(Object dimension);
     
-    public String after(String str);
+    public String before(Object str);
     
-    public long charToLong(char ch);
+    public String after(Object str);
     
-    public char longToChar(long num);
+    public long charToLong(Object ch);
+    
+    public char longToChar(Object num);
     
     public int getRange();
-
+    */
 }
