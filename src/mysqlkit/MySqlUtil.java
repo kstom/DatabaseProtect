@@ -7,10 +7,12 @@
 package mysqlkit;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,9 +26,6 @@ import java.util.logging.Logger;
 public class MySqlUtil {
     private Connection conn = null;
     private Statement statement = null;
-    public enum Type {
-    INT, SHORT, STRING, FLOAT, DOUBLE, LONG, TIME, TIMESTEMP, DATE;
-    }
     
     public MySqlUtil(Connection conn){
         try {
@@ -64,42 +63,59 @@ public class MySqlUtil {
         return (String[])items.toArray();
     }
     
-    public List<String> onSelect(String tablename, String[] items){
+    public List<List<Object>> onSelect(String tablename, String[] items, SqlType[] types){
         if(items == null){
             return null;
         }
-        String items_str = items[0];
+        String items_str = items[0].toString();
         for(int i=1;i<items.length;i++){
-            items_str = items_str + "," + items[i];
+            items_str = items_str + "," + items[i].toString();
         }
         String sql = "select " + items_str + " from " + tablename;
         System.out.println("sql : "+sql);
-        return this.getResultListSet(sql);
+        return this.getOnSelectResult(sql,types);
         
         
     }
     
-    private List<List<String>> getOnSelectResult(String sql,Type[] type){
-        List<List<String>> result = new ArrayList<List<String>>();
+    private List<List<Object>> getOnSelectResult(String sql,SqlType[] type){
+        List<List<Object>> result = new ArrayList<List<Object>>();
         try {
-            ResultSet rs = this.statement.executeQuery(sql);
+            ResultSet rs = this.statement.executeQuery(sql);           
             while(rs.next()){
+                System.out.println("statement");
+                List<Object> listitems = new ArrayList<Object>();
                 for(int i=0;i<type.length;i++){
-                    if(type[i] == Type.DATE){
+                    if(type[i] == SqlType.INT){
+                        int item = rs.getInt(i+1);
+                        listitems.add(i, item);
+                    }else if(type[i] == SqlType.DATE){
                         Date item = rs.getDate(i+1);
-                        long litem = item.getTime();
-                    }else if(type[i] == Type.DOUBLE){
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.DOUBLE){
                         double item = rs.getDouble(i+1);
-                    }else if(type[i] == Type.FLOAT){
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.FLOAT){
                         float item = rs.getFloat(i+1);
-                    }else if(type[i] == Type.LONG){
-                        
-                    }else if(type[i] == Type.DOUBLE){
-                    }else if(type[i] == Type.DOUBLE){
-                    }else if(type[i] == Type.DOUBLE){
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.LONG){
+                        long item = rs.getLong(i+1);
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.SHORT){
+                        short item = rs.getShort(i+1);
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.STRING){
+                        String item = rs.getString(i+1);
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.TIME){
+                        Time item = rs.getTime(i+1);
+                        listitems.add(i,item);
+                    }else if(type[i] == SqlType.TIMESTAMP){
+                        Timestamp item = rs.getTimestamp(i+1);
+                        listitems.add(i,item);
                     }
                 }
-                
+                result.add(listitems);               
             }
             if(rs != null){
                 try{
@@ -116,7 +132,7 @@ public class MySqlUtil {
         return null;
     }
     
-    private List<String> getResultListSet(String sql){
+    public List<String> getResultListSet(String sql){
         List<String> result = new ArrayList<String>();
         try {
             ResultSet rs = this.statement.executeQuery(sql);

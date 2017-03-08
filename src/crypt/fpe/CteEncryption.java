@@ -15,20 +15,20 @@ import java.sql.Time;
  */
 public class CteEncryption {
     private long key=12345;
-    CharacterInterface chaInter;
+    //CharacterInterface chaInter;
     //private Object ref;
     
-    public CteEncryption(CharacterInterface chaInter){
-        this.chaInter = chaInter;
+    //public CteEncryption(CharacterInterface chaInter){
+        //this.chaInter = chaInter;
         //this.ref = ref;
-    }
+    //}
     
-    public CteEncryption(CharacterInterface chaInter, long key){
-        this.chaInter = chaInter;
+    public CteEncryption(long key){
+        //this.chaInter = chaInter;
         //this.ref = ref;
         this.key = key;
     }
-    public Object Encoding(Object plaintext){
+    public Object Encoding(CharacterInterface chaInter, Object plaintext){
         if(!chaInter.isMatch(plaintext)){
             System.out.println("the format is error!! can not encrypt!!");
             return "";
@@ -43,7 +43,7 @@ public class CteEncryption {
         return ciphertext;
     }
     
-    public Object Decoding(Object ciphertext){
+    public Object Decoding(CharacterInterface chaInter, Object ciphertext){
         if(!chaInter.isMatch(ciphertext)){
             System.out.println("the format is error!! can not encrypt!!");
             return "";

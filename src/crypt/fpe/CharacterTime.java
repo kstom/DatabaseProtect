@@ -15,9 +15,7 @@ import java.sql.Time;
 public class CharacterTime implements CharacterInterface{
     Time time;
     
-    public CharacterTime(Time time){
-        this.time = time;
-    }
+    
     
     @Override
     public boolean isMatch(Object time) {

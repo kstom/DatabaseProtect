@@ -11,11 +11,13 @@ import associationrule.apriori.Apriori;
 import crypt.fpe.*;
 import java.lang.*;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import mysqlkit.JDBCconnect;
-import mysqlkit.MySqlUtil;
+import mysqlkit.*;
+
 /**
  *
  * @author KSTOM
@@ -27,7 +29,7 @@ public class MySqlTest {
      */
     public static void main(String[] args) {
         
-        
+/*        
         long key = 12345;
         double db = 2.36;
         
@@ -41,20 +43,28 @@ public class MySqlTest {
         double str2 = (double)CE.Decoding(str1);
         System.out.println(str2);
         //你：100111101100000
+*/        
         
+
+        MySqlUtil sqlutil = new MySqlUtil(JDBCconnect.getConnect("sakila"));
         
-        /*
-        MySqlUtil sqlutil = new MySqlUtil(JDBCconnect.getConnect("groceries"));
-        List<String> list = sqlutil.getTablesName();
-        String[] items = new String[1];
-        items[0] = "items";
-        list = sqlutil.onSelect("inventory",items);
+        String[] items = new String[2];
+        items[0] = "store_id";
+        items[1] = "manager_staff_id";
+        String tablename = "store";
+        SqlType[] types = {SqlType.INT,SqlType.INT};
+        List<List<Object>> obj = sqlutil.onSelect(tablename, items, types);
+        long key = 999999;
+        CteEncryption cte = new CteEncryption(key);
+        System.out.println("------------plaintext--------------");
+        showSqlResult(obj,types);
+        obj = DataEncrypt.Encryption(obj, cte, types);
+        System.out.println("------------ciphertext--------------");
+        showSqlResult(obj,types);
+        System.out.println("------------plaintext--------------");
+        obj = DataEncrypt.Decryption(obj, cte, types);
+        showSqlResult(obj,types);
         
-        Apriori apriori = new Apriori(list);
-        
-        List<List<String>> result = apriori.getResult();
-        
-        showList(result);
         /*
         //showList(apriori.record);
         
@@ -92,6 +102,44 @@ public class MySqlTest {
         
         */
         //System.out.println(list.toString());
+    }
+    
+    static void showSqlResult(List<List<Object>> obj, SqlType[] types){
+        for(int i=0;i<obj.size();i++){
+            List<Object> items = obj.get(i);
+            for(int j=0; j<types.length;j++){
+                if(types[j] == SqlType.INT){
+                    int item = (int)items.get(j);
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.DATE){
+                    Date item = (Date)items.get(j);  
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.DOUBLE){
+                    double item = (double)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.FLOAT){
+                    float item = (float)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.LONG){
+                    long item = (long)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.SHORT){
+                    short item = (short)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.STRING){
+                    String item = (String)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.TIME){
+                    Time item = (Time)items.get(j); 
+                    System.out.print(item + " | ");
+                }else if(types[j] == SqlType.TIMESTAMP){
+                    Timestamp item = (Timestamp)items.get(j); 
+                    System.out.print(item + " | ");
+                }
+            }
+            System.out.println();
+        }
+       
     }
     
     static void showList(List<List<String>> lists){

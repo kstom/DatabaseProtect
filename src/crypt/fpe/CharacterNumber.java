@@ -14,12 +14,14 @@ public class CharacterNumber implements CharacterInterface{
 
     @Override
     public boolean isMatch(Object str) {
-        return true;
+        if(str instanceof Integer || str instanceof Short || str instanceof Long)
+            return true;
+        return false;
     }
 
     @Override
-    public Object objToInteger(Object obj) {
-        return obj;
+    public Object objToInteger(Object obj) {        
+        return (long)(int)obj;
     }
 
     @Override
